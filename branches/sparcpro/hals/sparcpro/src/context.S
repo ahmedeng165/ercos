@@ -76,7 +76,6 @@ _CPU_Context_Switch:
 	    clr %g4
 	    ld      [%o1 + REGW_LVL_OFFSET], %g4    ! Get the current task level
         set REGMAP, %g3;
-        mov 1, %g4
         st %g4, [%g3 + REGMAP_REGWIN_SET_CTRL];
 
         PUBLIC(_CPU_Context_restore_heir)
