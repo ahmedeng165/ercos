@@ -1,0 +1,116 @@
+
+# SYMBOL DEFINITIONS
+symbols
+
+hal 'HAL SPARCPRO LEON3 Configuration'
+stack 'Stacks configuration'
+memory 'Memory RAM/ROM configuration'
+ercos_ram_size 'RAM Size'
+ercos_rom_size  'ROM Size'
+
+
+FAST_MODE  'Fast mode configuration'
+CLOCK_SPEED_MHZ 'Clock speed in MHz'
+HAS_FPU	'Use Floating Point Unit'
+ERCOS_SIMU  'Simulation (timer.h related)'
+
+#RAM stuff
+
+ERCOS_RAMKERNEL 'Ram kernel?'
+ERCOS_ROMKERNEL 'Rom kernel?'
+
+ERCOS_INITIAL_RAM_ADDRESS 'origen RAM'
+ERCOS_INITIAL_ROM_ADDRESS 'origen ROM'
+
+ERCOS_RAM_SIZE_256KB    '256 KB'
+ERCOS_RAM_SIZE_512KB    '512 KB'
+ERCOS_RAM_SIZE_1MB      '1 MB'
+ERCOS_RAM_SIZE_2MB      '2 MB'
+ERCOS_RAM_SIZE_4MB      '4 MB'
+ERCOS_RAM_SIZE_8MB      '8 MB'
+ERCOS_RAM_SIZE_16MB     '16 MB'
+ERCOS_RAM_SIZE_32MB     '32 MB'
+
+ERCOS_ROM_SIZE_64KB		'64 KB'
+ERCOS_ROM_SIZE_128KB	'128 KB'
+ERCOS_ROM_SIZE_256KB	'256 KB'
+ERCOS_ROM_SIZE_512KB	'512 KB'
+ERCOS_ROM_SIZE_1MB		'1 MB'
+ERCOS_ROM_SIZE_2MB		'2 MB'
+
+#stack stuff
+ERCOS_STACK_BEGIN_ADDRESS 'Ercos stacks begin address'
+ERCOS_KERNEL_STACK_SIZE	'Ercos kernel stack size'
+ERCOS_MAIN_STACK_SIZE	'Ercos main stack size'
+ERCOS_MIN_STACK	'Ercos minimum stack size'
+ERCOS_IRQ_STACK_SIZE	'Ercos irq stack size'
+
+
+#--------------------	VALORES	-----------------------
+
+default CLOCK_SPEED_MHZ from 50
+default FAST_MODE from y
+default HAS_FPU from y
+default ERCOS_SIMU from y
+
+#					stacks stuff
+default ERCOS_STACK_BEGIN_ADDRESS from 0x403ff000 range 0x0-0xffffffff
+default ERCOS_KERNEL_STACK_SIZE from 8192 range 1024-16384
+default ERCOS_MAIN_STACK_SIZE from 16384 range 4096-32768
+default ERCOS_MIN_STACK from 1024 range 1024-8192
+default ERCOS_IRQ_STACK_SIZE from 2048 range 1024-8192
+
+default ERCOS_INITIAL_RAM_ADDRESS from 0x40000000 range 0x0-0xffffffff
+default ERCOS_INITIAL_ROM_ADDRESS from 0x0 range 0x0-0xffffffff
+
+default ERCOS_RAMKERNEL from y 				
+default ERCOS_ROMKERNEL from n
+
+unless ERCOS_ROMKERNEL suppress ercos_rom_size ERCOS_INITIAL_ROM_ADDRESS
+unless ERCOS_RAMKERNEL suppress ercos_ram_size ERCOS_INITIAL_RAM_ADDRESS
+
+choices ercos_ram_size
+    ERCOS_RAM_SIZE_256KB
+    ERCOS_RAM_SIZE_512KB
+   	ERCOS_RAM_SIZE_1MB
+    ERCOS_RAM_SIZE_2MB
+    ERCOS_RAM_SIZE_4MB
+    ERCOS_RAM_SIZE_8MB
+    ERCOS_RAM_SIZE_16MB
+    ERCOS_RAM_SIZE_32MB
+    default ERCOS_RAM_SIZE_4MB
+
+choices ercos_rom_size
+	ERCOS_ROM_SIZE_64KB
+	ERCOS_ROM_SIZE_128KB
+	ERCOS_ROM_SIZE_256KB
+	ERCOS_ROM_SIZE_512KB
+	ERCOS_ROM_SIZE_1MB
+	ERCOS_ROM_SIZE_2MB
+	default ERCOS_ROM_SIZE_512KB
+
+#---------------------	MENUS	----------------------
+
+menu stack
+	ERCOS_STACK_BEGIN_ADDRESS@ 
+	ERCOS_KERNEL_STACK_SIZE%
+	ERCOS_MAIN_STACK_SIZE%
+	ERCOS_MIN_STACK%
+	ERCOS_IRQ_STACK_SIZE% 
+
+menu memory
+	ERCOS_RAMKERNEL
+    ERCOS_ROMKERNEL
+    ERCOS_INITIAL_RAM_ADDRESS@
+    ERCOS_INITIAL_ROM_ADDRESS@
+    ercos_ram_size
+    ercos_rom_size		
+	
+menu hal
+	stack
+	memory
+	CLOCK_SPEED_MHZ%
+	FAST_MODE
+	HAS_FPU
+	ERCOS_SIMU
+	
