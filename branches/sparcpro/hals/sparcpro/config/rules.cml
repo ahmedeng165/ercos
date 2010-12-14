@@ -1,0 +1,32 @@
+
+# SYMBOL DEFINITIONS
+symbols
+
+arch 'ARCH SPARCPRO Configuration'
+regwin 'Register Windows Set Configuration'
+
+SPARCPRO 'Architecture name'
+SPARCPRO_HAL_IRQ_REG_WINDOWS 'Number of reg. windows set for interrupts'
+SPARCPRO_HAL_TASK_REG_WINDOWS 'Number of reg. windows set for tasks'
+
+
+
+
+
+#--------------------	VALORES	-----------------------
+
+default SPARCPRO from y
+default SPARCPRO_HAL_IRQ_REG_WINDOWS from 0 range 0-4
+default SPARCPRO_HAL_TASK_REG_WINDOWS from 2 range 0-4
+
+
+#---------------------	MENUS	----------------------
+
+menu regwin
+    SPARCPRO_HAL_IRQ_REG_WINDOWS%
+    SPARCPRO_HAL_TASK_REG_WINDOWS%
+
+menu arch
+	SPARCPRO
+    regwin
+	
