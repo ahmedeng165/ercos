@@ -72,6 +72,7 @@ static void OS_IdleTask (void)
     /* execute the trace reader thread or enter into low-power mode */
 #ifdef CONFIG_ERCOS_TRACER
     OS_TracerReaderThread ();
+#error "Tracer activated"
 #else
     while (1) {
     	ercos_hal_power_down ();
@@ -182,6 +183,7 @@ tid_t OS_TaskCreate(uint32_t *_stackaddr, uint32_t  _stacksize, void *_ip, void 
 
     task = GET_ELEMENT(OS_task_t, n, node);
     TRACE (task->tid, "d");
+    TRACE (_priority, "d");
     KTRACE (KTRACE_CREATE, task->tid, _priority);
 
     /*  Stablish the thread stack */
@@ -203,7 +205,7 @@ tid_t OS_TaskCreate(uint32_t *_stackaddr, uint32_t  _stacksize, void *_ip, void 
 #endif
 
     /*  Init the new thread context */
-    ercos_hal_hwcontext_init (&(task->context), task->stack.addr, task->stack.size, 0, OS_ThreadWrapper);
+    ercos_hal_hwcontext_init (&(task->context), task->stack.addr, task->stack.size, _priority, OS_ThreadWrapper);
 
     /*  Stablish the thread status  */
     task->status = TS_READY;
