@@ -1,0 +1,83 @@
+/*	Entry point	*/
+ENTRY(ercos_hal_reset_entry)
+
+#include <public/config.h>
+
+
+MEMORY
+{
+	ram : ORIGIN = CONFIG_ERCOS_INITIAL_RAM_ADDRESS,
+#if defined(CONFIG_ERCOS_RAM_SIZE_256KB)
+          LENGTH = 256K
+#elif defined(CONFIG_ERCOS_RAM_SIZE_512KB)
+          LENGTH = 512K
+#elif defined(CONFIG_ERCOS_RAM_SIZE_1MB)
+          LENGTH = 1M
+#elif defined(CONFIG_ERCOS_RAM_SIZE_2MB)
+          LENGTH = 2M
+#elif defined(CONFIG_ERCOS_RAM_SIZE_4MB)
+          LENGTH = 4M
+#elif defined(CONFIG_ERCOS_RAM_SIZE_8MB)
+          LENGTH = 8M
+#elif defined(CONFIG_ERCOS_RAM_SIZE_16MB)
+          LENGTH = 16M
+#else
+          LENGTH = 32M
+#endif
+
+}
+
+
+SECTIONS
+{
+  .text 0x00100000:	
+  {
+    CODE_START = .;
+      
+    *(.multiboot) 
+    *(.text*) 
+    *(.rodata*) 
+    *(.gnu.linkonce.*)
+    *(.eh_frame)
+
+    . = ALIGN(0x1000);
+	
+    CODE_END = .;
+
+  } > ram
+
+  .data :
+  {
+  	DATA_START = .;
+  	
+    *(.data)
+
+    . = ALIGN(0x10);
+	__ctors_GLOBAL__ = .;
+    *(.ctors)
+	QUAD(0)
+	. = ALIGN(0x10);
+	__dtors_GLOBAL__ = .;
+    *(.dtors)
+	QUAD(0)
+	. = ALIGN(0x1000);
+    
+    DATA_END = .;
+    
+  } > ram
+
+  .bss :
+  {
+    bss_start = .;
+    *(.bss)
+    *(COMMON)
+    . = ALIGN(0x1000);
+    end = .;
+  } > ram
+    
+  /*/DISCARD/ :
+  {
+    *(*)
+  }*/
+  
+}
