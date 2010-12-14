@@ -73,9 +73,11 @@ void sparcpro_context_init(sparcpro_context_t  *the_context,
     /*  In case the task has a level bigger than the maximum number of register
      *  windows sets, we assign the upper level. Otherwise the fiven level
      */
-    the_context->regwin_level = 
-        (level > CONFIG_SPARCPRO_HAL_TASK_REG_WINDOWS) ?
-        CONFIG_SPARCPRO_HAL_TASK_REG_WINDOWS : level;
+    /*  FIXME: check the level  */
+    the_context->regwin_level = level;
+//    the_context->regwin_level = 
+//        (level > CONFIG_SPARCPRO_HAL_TASK_REG_WINDOWS) ?
+//        CONFIG_SPARCPRO_HAL_TASK_REG_WINDOWS : level;
 
     /*
      *  Build the PSR for the task.  Most everything can be 0 and the
