@@ -21,7 +21,6 @@
  */
 
 #include <public/glue.h>
-#include <private/ercos-hal.h>
 #include <ercos/lib/stdio.h>
 
 #include <ercos/kernel/traps.h>

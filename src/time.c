@@ -22,7 +22,6 @@
  */
 
 #include <public/glue.h>
-#include <private/ercos-hal.h>
 
 #include <ercos/kernel/time.h>
 #include <ercos/kernel/ktracer.h>

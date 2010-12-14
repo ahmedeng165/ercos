@@ -13,7 +13,6 @@
 */
 
 #include <public/glue.h>
-#include <private/ercos-hal.h>
 
 #include <ercos/kernel/task.h>
 #include <ercos/kernel/types.h>
