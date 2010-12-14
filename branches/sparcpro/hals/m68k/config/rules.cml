@@ -1,0 +1,22 @@
+# SYMBOL DEFINITIONS
+symbols
+
+arch 'ARCH Motorola 68000 Configuration'
+
+M68K 'Architecture name'
+
+
+
+
+
+#--------------------	VALORES	-----------------------
+
+default M68K from y
+
+
+#---------------------	MENUS	----------------------
+source "../mc68332/config/rules.cml"
+
+menu arch
+	hal
+	M68K

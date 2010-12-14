@@ -1,0 +1,22 @@
+
+# SYMBOL DEFINITIONS
+symbols
+
+arch 'ARCH SPARC Configuration'
+
+SPARC 'Architecture name'
+
+
+
+
+
+#--------------------	VALORES	-----------------------
+
+default SPARC from y
+
+
+#---------------------	MENUS	----------------------
+
+menu arch
+	SPARC
+	
