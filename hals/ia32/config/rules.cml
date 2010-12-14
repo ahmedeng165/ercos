@@ -1,0 +1,16 @@
+# SYMBOL DEFINITIONS
+symbols
+
+arch 'ARCHITECTURE IA32'
+IA32 'Architecture name'
+
+
+#--------------------	VALORES	-----------------------
+
+default IA32 from y
+
+source "../x86/config/rules.cml"
+
+menu 	arch
+		IA32
+		hal
