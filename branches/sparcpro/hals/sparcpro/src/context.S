@@ -38,13 +38,15 @@
         PUBLIC(_CPU_Context_Switch)
 _CPU_Context_Switch:
         ! skip g0
-       st      %g1, [%o0 + G1_OFFSET]       ! save the global registers
-       std     %g2, [%o0 + G2_OFFSET]
-       std     %g4, [%o0 + G4_OFFSET]
-       std     %g6, [%o0 + G6_OFFSET]
+       !st      %g1, [%o0 + G1_OFFSET]       ! save the global registers
+       !std     %g2, [%o0 + G2_OFFSET]
+       !std     %g4, [%o0 + G4_OFFSET]
+       !std     %g6, [%o0 + G6_OFFSET]
 
-       std     %l0, [%o0 + L0_OFFSET]       ! save the local registers
-       std     %l2, [%o0 + L2_OFFSET]
+       st      %l1, [%o0 + L1_OFFSET]       ! save local registers
+       st      %l2, [%o0 + L2_OFFSET]       ! save local registers
+       !std     %l0, [%o0 + L0_OFFSET]       ! save the local registers
+       !std     %l2, [%o0 + L2_OFFSET]
        !std     %l4, [%o0 + L4_OFFSET]
        !std     %l6, [%o0 + L6_OFFSET]
 
@@ -189,13 +191,15 @@ done_flushing:
         ! skip g0
        ld      [%o1 + Y_OFFSET], %g1		  ! restore the Y register
        wr		%g1, %y
-	   ld      [%o1 + G1_OFFSET], %g1        ! restore the global registers
-       ldd     [%o1 + G2_OFFSET], %g2
-       ldd     [%o1 + G4_OFFSET], %g4
-       ldd     [%o1 + G6_OFFSET], %g6
+	   !ld      [%o1 + G1_OFFSET], %g1        ! restore the global registers
+       !ldd     [%o1 + G2_OFFSET], %g2
+       !ldd     [%o1 + G4_OFFSET], %g4
+       !ldd     [%o1 + G6_OFFSET], %g6
 
-       ldd     [%o1 + L0_OFFSET], %l0        ! restore the local registers
-       ldd     [%o1 + L2_OFFSET], %l2
+       ld      [%o1 + L1_OFFSET], %l1        ! restore the local registers
+       ld      [%o1 + L2_OFFSET], %l2        ! restore the local registers
+       !ldd     [%o1 + L0_OFFSET], %l0        ! restore the local registers
+       !ldd     [%o1 + L2_OFFSET], %l2
        !ldd     [%o1 + L4_OFFSET], %l4
        !ldd     [%o1 + L6_OFFSET], %l6
 
@@ -206,8 +210,7 @@ done_flushing:
 
        !ldd     [%o1 + O2_OFFSET], %o2        ! restore the output registers
        !ldd     [%o1 + O4_OFFSET], %o4
-       ldd     [%o1 + O6_SP_OFFSET], %o6
-        !do o0/o1 last to avoid destroying heir context pointer
+       ldd     [%o1 + O6_SP_OFFSET], %o6      !do o0/o1 last to avoid destroying heir context pointer
        !ldd     [%o1 + O0_OFFSET], %o0        ! overwrite heir pointer
 
 	restore
