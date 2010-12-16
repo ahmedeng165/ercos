@@ -237,7 +237,7 @@ system_reset:
 	/* Initialize FPU registers to zero	*/
 
 //#ifndef _SOFT_FLOAT
-#ifndef CONFIG_HAS_FPU
+#ifdef CONFIG_HAS_FPU
 	mov	1, %o0
 	ld	[ %g0 ], %f0
 	tst	%o0
