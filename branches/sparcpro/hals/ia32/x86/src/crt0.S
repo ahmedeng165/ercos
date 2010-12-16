@@ -134,7 +134,6 @@ ercos_hal_reset_entry:
 	cli
 	movl 	%ebx, multiboot_info_ptr
 	movl	%eax, magic_number
-	xorl 	%ebx, %ebx
 
 // eflags a cero
     pushl 	$0
