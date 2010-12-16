@@ -45,17 +45,17 @@ _CPU_Context_Switch:
 
        std     %l0, [%o0 + L0_OFFSET]       ! save the local registers
        std     %l2, [%o0 + L2_OFFSET]
-       std     %l4, [%o0 + L4_OFFSET]
-       std     %l6, [%o0 + L6_OFFSET]
+       !std     %l4, [%o0 + L4_OFFSET]
+       !std     %l6, [%o0 + L6_OFFSET]
 
-       std     %i0, [%o0 + I0_OFFSET]       ! save the input registers
-       std     %i2, [%o0 + I2_OFFSET]
-       std     %i4, [%o0 + I4_OFFSET]
+       !std     %i0, [%o0 + I0_OFFSET]       ! save the input registers
+       !std     %i2, [%o0 + I2_OFFSET]
+       !std     %i4, [%o0 + I4_OFFSET]
        std     %i6, [%o0 + I6_FP_OFFSET]
 
-       std     %o0, [%o0 + O0_OFFSET]       ! save the output registers
-       std     %o2, [%o0 + O2_OFFSET]
-       std     %o4, [%o0 + O4_OFFSET]
+       !std     %o0, [%o0 + O0_OFFSET]       ! save the output registers
+       !std     %o2, [%o0 + O2_OFFSET]
+       !std     %o4, [%o0 + O4_OFFSET]
        std     %o6, [%o0 + O6_SP_OFFSET]
 
         rd      %psr, %l0
@@ -73,8 +73,9 @@ _CPU_Context_Switch:
 
         /*  Now we change the register window set   */
 
+_change_donut:
 	    clr %g4
-	    ld      [%o1 + REGW_LVL_OFFSET], %g4    ! Get the current task level
+	    ld      [%o1 + REGW_LVL_OFFSET], %g4    ! Get the heir task level
         set REGMAP, %g3;
         st %g4, [%g3 + REGMAP_REGWIN_SET_CTRL];
 
@@ -195,19 +196,19 @@ done_flushing:
 
        ldd     [%o1 + L0_OFFSET], %l0        ! restore the local registers
        ldd     [%o1 + L2_OFFSET], %l2
-       ldd     [%o1 + L4_OFFSET], %l4
-       ldd     [%o1 + L6_OFFSET], %l6
+       !ldd     [%o1 + L4_OFFSET], %l4
+       !ldd     [%o1 + L6_OFFSET], %l6
 
-       ldd     [%o1 + I0_OFFSET], %i0        ! restore the output registers
-       ldd     [%o1 + I2_OFFSET], %i2
-       ldd     [%o1 + I4_OFFSET], %i4
+       !ldd     [%o1 + I0_OFFSET], %i0        ! restore the output registers
+       !ldd     [%o1 + I2_OFFSET], %i2
+       !ldd     [%o1 + I4_OFFSET], %i4
        ldd     [%o1 + I6_FP_OFFSET], %i6
 
-       ldd     [%o1 + O2_OFFSET], %o2        ! restore the output registers
-       ldd     [%o1 + O4_OFFSET], %o4
+       !ldd     [%o1 + O2_OFFSET], %o2        ! restore the output registers
+       !ldd     [%o1 + O4_OFFSET], %o4
        ldd     [%o1 + O6_SP_OFFSET], %o6
         !do o0/o1 last to avoid destroying heir context pointer
-       ldd     [%o1 + O0_OFFSET], %o0        ! overwrite heir pointer
+       !ldd     [%o1 + O0_OFFSET], %o0        ! overwrite heir pointer
 
 	restore
 	save
