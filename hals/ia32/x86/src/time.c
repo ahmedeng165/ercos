@@ -133,9 +133,6 @@ static void comprueba_APIC(void) {
 
 	uint32_t aux;
 	bool_t test_OK;
-
-	test_OK=TRUE;
-
 	aux = apic_read(APIC_LVT0);
 	if (aux != (DELIVERY_MODE_ExtINT)){
 		DEBUG("El registro LVT0 del apic vale 0x%x y tendría que valer 0x%x", aux, ( DELIVERY_MODE_ExtINT));
@@ -182,7 +179,7 @@ void timer_config(void) {
 
 	apic_write(APIC_LVTT, (PERIODIC_MODE | TRIGGER_LEVEL | TIME_PIT_INTR));
 
-	tmp = (uint64_t)((TIME_PIT_PERIOD * APIC_CLOCK_FREQ)/1000000);
+	tmp = ((TIME_PIT_PERIOD * APIC_CLOCK_FREQ)/1000000);
 	cuenta = (uint32_t) tmp;
 
 	DEBUG("cuenta escrita en el apic: %d",cuenta);
@@ -207,7 +204,7 @@ void clock_init(uint32_t _ticks) {
 
 	TIME_WRITE8(COUNT_CONTROL_REG, COUNT_MODE);
 
-	aux = (uint64_t)((_ticks * RATE)/1000000);
+	aux = ((uint64_t)_ticks * RATE)/1000000;
 	count=(aux & 0xFFFF);
 
 //	DEBUG("cuenta programada es %d, solicitado %d",count,_ticks);
@@ -215,9 +212,10 @@ void clock_init(uint32_t _ticks) {
 	TIME_WRITE8(COUNT_0_ADDR,(count & 0xFF));
 	TIME_WRITE8(COUNT_0_ADDR,((count >> 8) & 0xFF));
 
+	irq_enable();
+
 	PIC_WRITE8(ADDR_PIC1_1, 0xFE);	//habilita la interrupci�n
 
-	irq_enable();
 }
 
 /*

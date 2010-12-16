@@ -4,34 +4,29 @@
 #include <public/glue.h>
 
 /* This is a more reliable delay than a few short jmps. */
-#define iodelay() do{\
-	asm("pushl %eax; inb $0x80,%al; inb $0x80,%al; popl %eax");	\
-	}while(0)
+#define iodelay() \
+	asm("pushl %eax; inb $0x80,%al; inb $0x80,%al; popl %eax")
 
-#define inportb(port,val) do{\
-	asm volatile ("inb %%dx, %%al" : "=a" (val) : "d" (port)); \
-	}while(0)
+#define inportb(port,val) asm volatile ("inb %%dx, %%al" : "=a" (val) : "d" (port))
 
-#define outportb(port,val) do{\
-	asm volatile("outb %%al, %%dx" : : "d" (port), "a" (val));	\
-}while(0)
+#define outportb(port,val) asm volatile("outb %%al, %%dx" : : "d" (port), "a" (val))
 
 //for video memory
-#define outb_p(port, val)	do{	\
+#define outb_p(port, val) ({	\
 	outportb(port, val);	\
 	iodelay();		\
-}while(0)
-
+})
 static inline uint16_t inportw(uint16_t port){
          // Get a byte from I/O port
-       register uint16_t val;
-       asm volatile ("inw %%dx, %%ax" : "=a" (val) : "d" (port));
-
-       return( val );
+         register uint16_t val;
+         asm volatile ("inw %%dx, %%ax" : "=a" (val) : "d" (port));
+         return( val );
 }
 
 static inline void outportw(uint16_t port, uint16_t val){
-		asm volatile("outw %%ax, %%dx" : : "d" (port), "a" (val));
+
+         asm volatile("outw %%ax, %%dx" : : "d" (port), "a" (val));
+
 }
 
 
@@ -62,23 +57,26 @@ static inline uint32_t str(void)
 
 
 /* Macros para leer registros especificos */
-#define rdmsr(msr,a,d) do{\
+#define rdmsr(msr,a,d) \
      asm volatile("rdmsr" \
 		          : "=a" (a), "=d" (d) \
-                  : "c" (msr));		\
-	}while(0)
+                  : "c" (msr))
 
-#define wrmsr(msr,a,d) do{\
+#define wrmsr(msr,a,d) \
      asm volatile("wrmsr" \
 				  : /* no outputs */ \
-				  : "c" (msr), "a" (a), "d" (d));	\
-	}while(0)
+				  : "c" (msr), "a" (a), "d" (d))
 
 /*	Macros de lectura de marcas de tiempo del TSC	*/
 
-#define rdtsc(low,high) do{\
-     asm volatile("rdtsc" : "=a" (low), "=d" (high));	\
-	}while(0)
+#define rdtsc(low,high) \
+     asm volatile("rdtsc" : "=a" (low), "=d" (high))
+
+#define rdtscl(low) \
+     asm volatile ("rdtsc" : "=a" (low) : : "edx")
+
+#define rdtscll(val) \
+     asm volatile ("rdtsc" : "=A" (val))
 
 
 /* Funciones escritura/lectura de memoria */

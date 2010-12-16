@@ -62,10 +62,10 @@ static void dump_gdt(uint32_t base, uint16_t limit) {
 	uint8_t mem;
 	uint16_t i;
 
-	printf("dump de GDT entry recently created:\n");
+	DEBUG("dump de GDT: base: 0x%x, límite: 0x%x", base, limit);
 	for (i = 0; i < limit; i++) {
 		mem = readb((void *) (base + i));
-		printf("[Byte %d]0x%x\n",(i%8), mem);
+		DEBUG("[%d]0x%x",(i%8), mem);
 	}
 	return;
 }
@@ -108,10 +108,7 @@ void gdt_set_entry(int num, unsigned long base, unsigned long limit,
 	gdt[num].atrib_B |= (gran & 0xF0);
 	gdt[num].atrib_A = access;
 
-#ifndef CONFIG_NDEBUG
-//	printf("direccion del contexto: 0x%x\n",  base);
-//	dump_gdt((gp.base+(num*8)), 8);
-#endif
+//	dump_gdt(gp.base,((uint16_t) ((num+1)*8)));
 	return;
 }
 /*

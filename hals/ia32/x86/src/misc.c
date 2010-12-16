@@ -16,7 +16,6 @@
 #include <public/posix.h> /* printf */
 #include <public/ercos-lah.h> /* current task and previous current task; lah_main */
 #include <x86/misc.h>
-#include <x86/Tables.h>
 #include <x86/console/text_console.h>
 #include <Multiboot.h>
 
@@ -130,12 +129,11 @@ void ia32_cstart(unsigned long proc_info, unsigned long magic, unsigned long add
  */
 void ia32_dispatch(void) {
 
-	uint16_t sel[3];
+	static uint16_t sel[3];				//={0,0,0};
 
 	if (current == old_current)
 		return;
 
-	sel[2] = 0;
 	sel[2] =  (uint16_t)  (current->context.index * 8);
 
 	// salto a la TSS de current (produce un Task Switch)
@@ -165,7 +163,7 @@ void ia32_context_init(ia32_ext_tss_t * ctx, void * stackbase,
 			(sizeof(ia32_ext_tss_t) - 1), (GDT_DPL_0| GDT_SEG_P | GDT_TYPE_TSS
 					| GDT_SYS_SEG), 0x00);
 
-	ctx->esp = (uint32_t) stackbase + stacksize -1;
+	ctx->esp = (uint32_t) stackbase + (uint32_t) stacksize;
 	ctx->eip = (uint32_t) entry;
 	ctx->eflags = (uint32_t)0x0202; // IF
 
@@ -190,8 +188,7 @@ static void dump_mem(uint32_t base, uint16_t limit) {
 	DEBUG("dump de TSS: base: 0x%x, tamaño: 0x%x", base, limit);
 
 	for (i = 0; i < limit; i++) {
-		mem = readb((void *) (base + i));
-		DEBUG("[%d]0x%x",i, mem);
+		mem = readb((void *) (base + i));DEBUG("[%d]0x%x",i, mem);
 	}
 }
 /*

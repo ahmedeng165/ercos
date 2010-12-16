@@ -18,7 +18,7 @@
 
 #include <public/glue.h>
 #include <public/config.h>
-#include <arch.h>		//TODO ver si se puede sacar esto de aqui
+#include <arch.h>
 
 #define TIME_WRITE8		outportb
 #define TIME_WRITE16	outportw
@@ -275,24 +275,22 @@
 	#define  APIC_TDR_DIV  APIC_TDR_DIV_128
 #endif
 
-/*	TODO sacar esto a asm.h
+/*
  * APIC Write operations
  */
 static inline void apic_write(unsigned int reg, unsigned int v) {
 	//this method saves 1 asm instruction
-		asm volatile("movl %%eax, (%%edx)":   : "d" (APIC_BASE+reg), "a" (v));
-
+	asm volatile("movl %%eax, (%%edx)":   : "d" (APIC_BASE+reg), "a" (v));
 //	*((volatile unsigned int *) (APIC_BASE+reg)) = v;
 }
-/* TODO sacar esto a asm.h
+/*
  * APIC Read operations
  */
 static inline uint32_t apic_read(uint32_t reg) {
 
 	return *((volatile unsigned int *) (APIC_BASE+reg));
 }
-/* TODO sacar esto a time.c
- * taken from linux source code */
+/* taken from linux source code */
 static inline void init_apic_ldr(void){
 
 	unsigned long val;
@@ -303,7 +301,6 @@ static inline void init_apic_ldr(void){
 	apic_write(APIC_LDR, val);
 }
 
-// TODO sacar esto al time.c???
 //! ciclos/segundo de la cpu (ver time_stamp_counter_c.c)
 extern unsigned long long cpu_hz;
 //! CPU Bus cycles/sec.

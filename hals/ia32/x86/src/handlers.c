@@ -29,9 +29,9 @@ extern volatile long ia32_intr_nesting;
 /* Just debug purposes */
 static void register_dump(ia32_context_t *ctx){
 
-	DEBUG("Registros:ebp:0x%x\nesp:0x%x\nebx:0x%x\nedx:0x%x\necx:0x%x\neax:0x%x\n"
-		 "eip:0x%x\neflags:0x%x",ctx->ebp,ctx->esp,ctx->ebx,ctx->edx,ctx->ecx,ctx->eax,
-		ctx->eip, ctx->eflags);
+	DEBUG("Registros:\nedi:0x%x\nesi:0x%x\nebp:0x%x\nesp:0x%x\nebx:0x%x\nedx:0x%x\necx:0x%x\neax:0x%x\n"
+		 "vector:0x%x\neip:0x%x\neflags:0x%x",ctx->edi, ctx->esi,ctx->ebp,ctx->esp,ctx->ebx,ctx->edx,ctx->ecx,ctx->eax,
+		 ctx->vector, ctx->eip, ctx->eflags);
 
 }
 
@@ -130,16 +130,16 @@ void ia32_interrupt_handlers(ia32_context_t *ctx) {
 		break;
 
 	case 13:
-		DEBUG("Exception: GP FAULT || error code: 0x%x\n", ctx->errcode);
+		DEBUG("Exception received GENERAL PROTECTION FAULT, error code: 0x%x vector: 0x%x!!eip:0x%x pila:0x%x\n", ctx->errcode, ctx->vector, ctx->eip, ctx->esp);
 		register_dump(ctx);
-		ercos_lah_panic("Panic!!!");
+		ercos_lah_panic("Esta interrupción no debería haberse producido!!!");
 		break;
 
 	case 14:
 		asm volatile("movl %%cr2, %%eax" : "=a"(dir) : );
-		DEBUG("Exception PAGE FAULT!! \n dirección: 0x%x", dir);
+		DEBUG("Exception received PAGE FAULT, eip: 0x%x vector: 0x%x!! \n dirección: 0x%x", ctx->eip, ctx->vector, dir);
 		register_dump(ctx);
-		ercos_lah_panic("Panic!!!");
+		ercos_lah_panic("Esta interrupción no debería haberse producido!!!");
 		break;
 
 	case 15:
@@ -172,8 +172,8 @@ void ia32_interrupt_handlers(ia32_context_t *ctx) {
 		break;
 
 	default:
-		DEBUG("Interrupt number: %d \n errorcode: 0x%x \n",ctx->vector,ctx->errcode);
-		register_dump(ctx);
+//		DEBUG("Interrupt number: %d \n errorcode: 0x%x \n",ctx->vector,ctx->errcode);
+//		register_dump(ctx);
 		ercos_lah_intr_handler(ctx->vector);
 //		asm volatile("add $0x1c,%esp \niret");
 		break;
