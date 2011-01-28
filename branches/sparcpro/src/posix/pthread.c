@@ -268,7 +268,7 @@ int pthread_setspecific(pthread_key_t key, const void *value)
     SYS_TaskGetStackParameters(&stackaddr, &stacksize);
 
     /*  End stack address   */
-    stackend = ((uint32_t*)stackaddr - stacksize);
+    stackend = (uint32_t*)(stackaddr - stacksize);
     //DEBUG ("stackaddr=%p; stacksize=%p; stackend=%p; offset=%p", stackaddr, stacksize, stackend, key * sizeof (void *));
 
     /*  Init the thread specific storage area   */
@@ -285,7 +285,7 @@ void *pthread_getspecific(pthread_key_t key)
     /*  Get the caller stack parameters */
     SYS_TaskGetStackParameters(&stackaddr, &stacksize);
 
-    stackend = ((uint32_t*)stackaddr - stacksize);
+    stackend = (uint32_t*)(stackaddr - stacksize);
    //DEBUG ("stackaddr=%p; stacksize=%p; stackend=%p; offset=%p", stackaddr, stacksize, stackend, key * sizeof (void *));
 
 #ifndef CONFIG_NDEBUG
