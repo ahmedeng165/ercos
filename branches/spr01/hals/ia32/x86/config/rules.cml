@@ -1,0 +1,148 @@
+
+# SYMBOL DEFINITIONS
+symbols
+
+hal 'HAL IA32 Configuration'
+stack 'Stacks configuration'
+apic_divisor  'APIC clk divisor'
+memory 'Memory RAM/ROM configuration'
+ercos_ram_size 'RAM Size'
+ercos_rom_size  'ROM Size'
+
+APIC_BASE 'APIC Base addres'
+UART_CLK 'UART clock speed'
+BAUDIOS 'UART Baud rate'
+
+CPU_SPEED 'Processor bus speed'
+
+# paging options
+PAGE_SIZE	'Page size'
+ITEMS_PER_TABLE 'Page table entries'
+MEM  'Amount of RAM'
+
+#apic divisor
+APIC_DIVISOR_1 'Divisor x1'
+APIC_DIVISOR_2 'Divisor x2'
+APIC_DIVISOR_4 'Divisor x4'
+APIC_DIVISOR_8 'Divisor x8'
+APIC_DIVISOR_16 'Divisor x16'
+APIC_DIVISOR_32 'Divisor x32'
+APIC_DIVISOR_64 'Divisor x64'
+APIC_DIVISOR_128 'Divisor x128'
+
+#RAM stuff
+
+ERCOS_RAMKERNEL 'Ram kernel?'
+ERCOS_ROMKERNEL 'Rom kernel?'
+
+ERCOS_INITIAL_RAM_ADDRESS 'origen RAM'
+ERCOS_INITIAL_ROM_ADDRESS 'origen ROM'
+
+ERCOS_RAM_SIZE_256KB    '256 KB'
+ERCOS_RAM_SIZE_512KB    '512 KB'
+ERCOS_RAM_SIZE_1MB      '1 MB'
+ERCOS_RAM_SIZE_2MB      '2 MB'
+ERCOS_RAM_SIZE_4MB      '4 MB'
+ERCOS_RAM_SIZE_8MB      '8 MB'
+ERCOS_RAM_SIZE_16MB     '16 MB'
+ERCOS_RAM_SIZE_32MB     '32 MB'
+
+ERCOS_ROM_SIZE_64KB		'64 KB'
+ERCOS_ROM_SIZE_128KB	'128 KB'
+ERCOS_ROM_SIZE_256KB	'256 KB'
+ERCOS_ROM_SIZE_512KB	'512 KB'
+ERCOS_ROM_SIZE_1MB		'1 MB'
+ERCOS_ROM_SIZE_2MB		'2 MB'
+
+#stack stuff
+ERCOS_STACK_BEGIN_ADDRESS 'Ercos stacks begin address'
+ERCOS_KERNEL_STACK_SIZE	'Ercos kernel stack size'
+ERCOS_MAIN_STACK_SIZE	'Ercos main stack size'
+ERCOS_MIN_STACK	'Ercos minimum stack size'
+ERCOS_IRQ_STACK_SIZE	'Ercos irq stack size'
+#--------------------	VALORES	-----------------------
+
+default APIC_BASE from 0xFEE00000
+default UART_CLK from 1843200
+default BAUDIOS from 19200
+
+default PAGE_SIZE from 4096
+default ITEMS_PER_TABLE from 1024
+default MEM from 0x1000000 range 0x40000-0x2000000
+
+default CPU_SPEED from 3000000000
+
+#					stacks stuff
+default ERCOS_STACK_BEGIN_ADDRESS from 0x00ffffff range 0x0-0xffffffff
+default ERCOS_KERNEL_STACK_SIZE from 8192 range 1024-16384
+default ERCOS_MAIN_STACK_SIZE from 16384 range 4096-32768
+default ERCOS_MIN_STACK from 1024 range 1024-8192
+default ERCOS_IRQ_STACK_SIZE from 2048 range 1024-8192
+
+default ERCOS_INITIAL_RAM_ADDRESS from 0x00000000 range 0x0-0xffffffff
+default ERCOS_INITIAL_ROM_ADDRESS from 0x0 range 0x0-0xffffffff
+
+default ERCOS_RAMKERNEL from y 				
+default ERCOS_ROMKERNEL from n
+
+unless ERCOS_ROMKERNEL suppress ercos_rom_size ERCOS_INITIAL_ROM_ADDRESS
+unless ERCOS_RAMKERNEL suppress ercos_ram_size ERCOS_INITIAL_RAM_ADDRESS
+
+choices ercos_ram_size
+    ERCOS_RAM_SIZE_256KB
+    ERCOS_RAM_SIZE_512KB
+   	ERCOS_RAM_SIZE_1MB
+    ERCOS_RAM_SIZE_2MB
+    ERCOS_RAM_SIZE_4MB
+    ERCOS_RAM_SIZE_8MB
+    ERCOS_RAM_SIZE_16MB
+    ERCOS_RAM_SIZE_32MB
+    default ERCOS_RAM_SIZE_16MB
+
+choices ercos_rom_size
+	ERCOS_ROM_SIZE_64KB
+	ERCOS_ROM_SIZE_128KB
+	ERCOS_ROM_SIZE_256KB
+	ERCOS_ROM_SIZE_512KB
+	ERCOS_ROM_SIZE_1MB
+	ERCOS_ROM_SIZE_2MB
+	default ERCOS_ROM_SIZE_512KB
+
+#---------------------	MENUS	----------------------
+choices apic_divisor
+	APIC_DIVISOR_1
+	APIC_DIVISOR_2
+	APIC_DIVISOR_4
+	APIC_DIVISOR_8
+	APIC_DIVISOR_16
+	APIC_DIVISOR_32
+	APIC_DIVISOR_64
+	APIC_DIVISOR_128
+	default APIC_DIVISOR_32
+
+menu stack
+	ERCOS_STACK_BEGIN_ADDRESS@ 
+	ERCOS_KERNEL_STACK_SIZE%
+	ERCOS_MAIN_STACK_SIZE%
+	ERCOS_MIN_STACK%
+	ERCOS_IRQ_STACK_SIZE% 
+
+menu memory
+	ERCOS_RAMKERNEL
+    ERCOS_ROMKERNEL
+    ERCOS_INITIAL_RAM_ADDRESS@
+    ERCOS_INITIAL_ROM_ADDRESS@
+    ercos_ram_size
+    ercos_rom_size
+    
+menu hal
+	stack
+	memory
+	APIC_BASE@
+	apic_divisor
+	UART_CLK%
+	BAUDIOS%
+	PAGE_SIZE%
+	MEM@
+	ITEMS_PER_TABLE%
+	CPU_SPEED%

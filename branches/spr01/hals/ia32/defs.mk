@@ -1,0 +1,1 @@
+CPPFLAGS+= -I$R/os/ercos/hals/ia32/include

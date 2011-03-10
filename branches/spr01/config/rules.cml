@@ -1,0 +1,89 @@
+
+# SYMBOL DEFINITIONS
+symbols
+
+ercos 'ERCOS configuration'
+ercos_trace 'ERCOS trace configuration'
+ercos_debug 'ERCOS debug configuration'
+misc 'Miscelaneous configuration'
+
+
+ERCOS_CLICKS_PER_TICK 'Clicks per tick'
+
+ERCOS_TRACER	'Use tracer'
+ERCOS_TRACER_BUFF_SIZE	'Tracer buffer size'
+ERCOS_TRACER_NLEVELS	'Tracer levels'
+ERCOS_KERNEL_TRACER	'Kernel tracer'
+ERCOS_DROP_TRACE	'Drop trace'
+ERCOS_DROP_APP_TRACE	'Drop app trace'
+
+ERCOS_GDB_MONITOR	'gdb monitor'
+NDEBUG	'ndebug'
+
+ERCOS_TEST 'use HAL tests?'
+
+ERCOS_MAX_THREADS	'threads max number'
+ERCOS_MAX_BINSEM	'binary semaphores max'
+ERCOS_MAX_RESEM		'semaphores max number'
+ERCOS_MAX_PRIO		'priority max number'
+
+#--------------------	VALORES	-----------------------
+
+#				debug stuff
+default NDEBUG from n
+default ERCOS_GDB_MONITOR from n
+
+#			n� usecs each periodic interrupt
+default ERCOS_CLICKS_PER_TICK from 50000 range 1-4294967295
+
+
+#				trace stuff
+default	ERCOS_TRACER from y
+default	ERCOS_TRACER_BUFF_SIZE from 1024 range 0-8192
+default ERCOS_TRACER_NLEVELS from 5 range 1-5
+default ERCOS_KERNEL_TRACER from n
+default ERCOS_DROP_TRACE from n
+default ERCOS_DROP_APP_TRACE from n
+
+default ERCOS_TEST from n
+
+
+
+#			miscelaneous stuff
+default ERCOS_MAX_THREADS	from 25 range 5-300
+default ERCOS_MAX_BINSEM	from 75 range 5-300
+default ERCOS_MAX_RESEM		from 75 range 5-300
+default ERCOS_MAX_PRIO		from 8 range 1-256
+
+#			dependencias
+#unless ERCOS_TRACER suppress ERCOS_TRACER_BUFF_SIZE 
+#unless ERCOS_TRACER suppress ERCOS_TRACER_NLEVELS 
+#unless ERCOS_TRACER suppress ERCOS_KERNEL_TRACER 
+
+
+#---------------------	MENUS	----------------------
+
+menu misc
+	ERCOS_MAX_THREADS%
+	ERCOS_MAX_BINSEM%
+	ERCOS_MAX_RESEM%
+	ERCOS_MAX_PRIO%
+
+menu ercos_debug
+	NDEBUG
+	ERCOS_GDB_MONITOR
+	
+menu ercos_trace
+	ERCOS_TRACER
+	ERCOS_TRACER_BUFF_SIZE%
+	ERCOS_TRACER_NLEVELS%
+	ERCOS_KERNEL_TRACER
+	ERCOS_DROP_TRACE
+	ERCOS_DROP_APP_TRACE
+	
+menu ercos
+	ercos_trace
+	ercos_debug
+	ERCOS_TEST
+    ERCOS_CLICKS_PER_TICK%
+	misc

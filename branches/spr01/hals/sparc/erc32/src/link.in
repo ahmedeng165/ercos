@@ -1,0 +1,102 @@
+/*	Entry point	*/
+ENTRY(ercos_hal_reset_entry)
+
+#include <public/config.h>
+
+ERC32_MEC = 0x01f80000;
+CLOCK_REG = 0x10000300;
+ERC32_RAM_START = CONFIG_ERCOS_INITIAL_RAM_ADDRESS;
+
+MEMORY
+{
+/*	rom : ORIGIN = 0x00000000, LENGTH = 512K*/
+#if defined CONFIG_ERCOS_ROMKERNEL
+	rom: ORIGIN = CONFIG_ERCOS_INITIAL_ROM_ADDRESS,
+#if defined(CONFIG_ERCOS_ROM_SIZE_64KB)
+          LENGTH = 64K
+#elif defined(CONFIG_ERCOS_ROM_SIZE_128KB)
+          LENGTH = 128K
+#elif defined(CONFIG_ERCOS_ROM_SIZE_256KB)
+          LENGTH = 256K
+#elif defined(CONFIG_ERCOS_ROM_SIZE_512KB)
+          LENGTH = 512K
+#elif defined(CONFIG_ERCOS_ROM_SIZE_1MB)
+          LENGTH = 1M
+#else
+          LENGTH = 2M
+#endif
+#endif
+
+	ram : ORIGIN = CONFIG_ERCOS_INITIAL_RAM_ADDRESS,
+#if defined(CONFIG_ERCOS_RAM_SIZE_256KB)
+          LENGTH = 256K
+#elif defined(CONFIG_ERCOS_RAM_SIZE_512KB)
+          LENGTH = 512K
+#elif defined(CONFIG_ERCOS_RAM_SIZE_1MB)
+          LENGTH = 1M
+#elif defined(CONFIG_ERCOS_RAM_SIZE_2MB)
+          LENGTH = 2M
+#elif defined(CONFIG_ERCOS_RAM_SIZE_4MB)
+          LENGTH = 4M
+#elif defined(CONFIG_ERCOS_RAM_SIZE_8MB)
+          LENGTH = 8M
+#elif defined(CONFIG_ERCOS_RAM_SIZE_16MB)
+          LENGTH = 16M
+#else
+          LENGTH = 32M
+#endif
+
+/*	ram : ORIGIN = 0x02000000, LENGTH = 4M*/
+}
+
+SECTIONS
+{
+  .text :
+  {
+    CODE_START = .;
+  
+    *(.romvec)
+    *(.text*)
+    *(.rodata*)
+    *(.gnu.linkonce.*)
+     *(.eh_frame)
+
+    . = ALIGN(0x10);
+	
+    CODE_END = .;
+
+  } > ram
+
+  .data :
+  {
+  	DATA_START = .;
+  	
+    *(.data)
+
+    . = ALIGN(0x10);
+	__ctors_GLOBAL__ = .;
+    *(.ctors)
+	QUAD(0)
+	__dtors_GLOBAL__ = .;
+    *(.dtors)
+	QUAD(0)
+	. = ALIGN(0x10);
+    
+    DATA_END = .;
+    
+  } > ram
+
+  .bss :
+  {
+    bss_start = .;
+    *(.bss)
+    *(COMMON)
+    . = ALIGN(0x10);
+    end = .;
+  } > ram
+    
+  /* /DISCARD/ :
+  {
+    *(*)
+  }*/
+}
