@@ -55,3 +55,20 @@ void CPU_SerialRxDebug (int car)
 {
 }
 
+void CPU_SerialTxDebug (char car)
+{
+    /*
+     * This variable is necessary in order to manipulate the UARTA.status
+     * in a local register instead of a global one....pa molar
+     */
+    volatile uint32_t uart_status;
+
+    /*  Waiting fot the channelis ready */
+    while(!((uart_status = REGMAP.uart_2_status) & LEON2_UART_THE));
+
+    REGMAP.uart_2_data = car;
+
+    /*  Wait for the correct character transmision  */
+    while(!((uart_status = REGMAP.uart_2_status) & LEON2_UART_THE));
+}
+

@@ -115,6 +115,11 @@ static inline void ercos_hal_uart_tx(uint8_t c) {
 	CPU_SerialTx(c);
 }
 
+static inline void ercos_hal_uart_dbg_tx(uint8_t c) {
+
+	ercos_hal_uart_tx(c);
+}
+
 static inline uint8_t ercos_hal_uart_rx(void) {
 
 	int car;

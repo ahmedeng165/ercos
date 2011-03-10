@@ -73,7 +73,7 @@ static void _OS_TracerSendEvent (const struct OS_TracerEvent * oev) {
 
 	/* FIXME -- write the event to the serial line */
 	for (i = 0; i < sizeof (struct OS_TracerEvent); i++) {
-		ercos_hal_uart_tx (ptr[i]);
+		ercos_hal_uart_dbg_tx (ptr[i]);
 	}
 #else
 	//printf ("<%x %x %x %p> 678901234567890\n", oev->seq, oev->ev.posix_event_id, oev->ev.posix_fragment_id, oev->crc);

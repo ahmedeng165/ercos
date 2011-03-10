@@ -51,6 +51,8 @@ void CPU_SerialRx (int *car);
  */
 void CPU_SerialRxDebug(int _car);
 
+void CPU_SerialTxDebug(char _car);
+
 
 
 

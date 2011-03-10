@@ -112,6 +112,11 @@ static inline void ercos_hal_uart_tx(uint8_t c) {
 //	text_console_putchar(c);
 }
 
+static inline void ercos_hal_uart_dbg_tx(uint8_t c) 
+{
+    ercos_hal_uart_tx(c);
+}
+
 static inline uint8_t ercos_hal_uart_rx(void) {
 
 	return serial_rx();

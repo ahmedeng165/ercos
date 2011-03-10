@@ -72,3 +72,20 @@ void CPU_SerialRxDebug(int _car)
     while(!((uart_status = ERC32_MEC.uart_status) & ERC32_MEC_UART_THEB));
 }
 
+void CPU_SerialTxDebug (char car)
+{
+    /*
+     * This variable is necessary in order to manipulate the ERC32_MEC.uart_status
+     * in a local register instead of a global one....pa molar
+     */
+    volatile uint32_t uart_status;
+
+    /*  Waiting fot the channelis ready */
+    while(!((uart_status = ERC32_MEC.uart_status) & ERC32_MEC_UART_THEB));
+
+    ERC32_MEC.uart_channel1 = car;
+
+    /*  Wait for the correct character transmision  */
+    while(!((uart_status = ERC32_MEC.uart_status) & ERC32_MEC_UART_THEB));
+}
+
