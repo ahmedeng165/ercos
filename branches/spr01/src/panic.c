@@ -34,6 +34,8 @@ void OS_KernelPanic (const char * str)
     DEBUG ("old_current 0x%x", old_current - task_table);
     DEBUG ("abs_timeout %x %d", (uint32_t)(current->abs_timeout >> 32), (uint32_t)current->abs_timeout);
     DEBUG ("abs_timeout dir 0x%x", &(current->abs_timeout));
+
+    DEBUG ("AIEEE!! endless loop()\n");
     while(1);
 }
 
