@@ -111,19 +111,12 @@ dont_do_the_window:
 
 	/* Save registers used in trap handler	*/
 
-/*
-	std	%l0, [%sp + 0x00]
-	std	%l2, [%sp + 0x08]*/
-	st	%g1, [%sp + 0x40]
+	st	%g1, [%sp + G1_OFFSET]
 	rd	%y, %g1
-	st	%g1, [%sp + 0x44]
-	std	%g2, [%sp + 0x48]
-	std	%g4, [%sp + 0x50]
-	std	%g6, [%sp + 0x58]
-/*	std	%i0, [%sp + 0x30]
-	std	%i2, [%sp + 0x38]
-	std	%i4, [%sp + 0x40]
-	std	%i6, [%sp + 0x48]*/
+	st	%g1, [%sp + Y_OFFSET]
+	std	%g2, [%sp + G2_OFFSET]
+	std	%g4, [%sp + G4_OFFSET]
+	std	%g6, [%sp + G6_OFFSET]
 
 	/*	Increment the interrupt counter irq_counter	*/
 	INC_VARIABLE(irq_counter,l5)    ! irq_counter++
@@ -226,19 +219,12 @@ trap_entry_return:
 	WRITE_PAUSE
 
 	/* Restore registers used in trap handler	*/
-/*	ldd	[%sp + 0x00], %l0
-
-	ldd	[%sp + 0x08], %l2*/
-	ld	[%sp + 0x44], %g1
+	ld	[%sp + Y_OFFSET], %g1
 	wr	%g1, %y
-	ld	[%sp + 0x40], %g1
-	ldd	[%sp + 0x48], %g2
-	ldd	[%sp + 0x50], %g4
-	ldd	[%sp + 0x58], %g6
-/*	ldd	[%sp + 0x30], %i0
-	ldd	[%sp + 0x38], %i2
-	ldd	[%sp + 0x40], %i4
-	ldd	[%sp + 0x48], %i6*/
+	ld	[%sp + G1_OFFSET], %g1
+	ldd	[%sp + G2_OFFSET], %g2
+	ldd	[%sp + G4_OFFSET], %g4
+	ldd	[%sp + G6_OFFSET], %g6
 
     sethi   %hi(kstack), %l4
 	ld	[%l4 + %lo(kstack)], %l5
@@ -259,18 +245,13 @@ restore_irq_context:
 	mov %l0, %psr
 	WRITE_PAUSE
 
-/*	ldd	[%sp + 0x00], %l0
-	ldd	[%sp + 0x08], %l2*/
-	ld	[%sp + 0x44], %g1
+	ld	[%sp + Y_OFFSET], %g1
 	wr	%g1, %y
-	ld	[%sp + 0x40], %g1
-	ldd	[%sp + 0x48], %g2
-	ldd	[%sp + 0x50], %g4
-	ldd	[%sp + 0x58], %g6
-/*	ldd	[%sp + 0x30], %i0
-	ldd	[%sp + 0x38], %i2
-	ldd	[%sp + 0x40], %i4
-	ldd	[%sp + 0x48], %i6*/
+	ld	[%sp + G1_OFFSET], %g1
+	ldd	[%sp + G2_OFFSET], %g2
+	ldd	[%sp + G4_OFFSET], %g4
+	ldd	[%sp + G6_OFFSET], %g6
+
 
     sethi   %hi(kstack), %l4
 	ld	[%l4 + %lo(kstack)], %l5
