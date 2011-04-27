@@ -96,7 +96,7 @@ void OS_IRQHandleEvent(void)
 
         list_for_each(pos, &event_list)
         {
-            sem = GET_ELEMENT(OS_Sem_t, event_list.first, node);
+            sem = GET_ELEMENT(OS_Sem_t, OS_ListGetNode(&event_list), node);
 
             DECREASE_PENDING_EVENTS();
 
